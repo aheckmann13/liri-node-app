@@ -3,35 +3,59 @@ require("dotenv").config();
 
 var axios = require("axios");
 var keys = require("./keys.js");
+var fs = require("fs");
 
 // var spotify = new Spotify(keys.spotify);
-// var bands = new Bands(keys.bands);
-var omdb = new OMDB(keys.omdb);
 
 var nodeArgs = process.argv;
-var movieName = "";
 
-for (var i = 3; i< nodeArgs.length; i++){
-    if (i > 3 && i < nodeArgs.length){
-        movieName = movieName + "+" + nodeArgs[i];
-    }
-    else {
-        movieName += nodeArgs[i];
-    }
+switch (nodeArgs[2]) {
+    case 'concer-this':
+        concertThis();
+        break;
+    case 'spotify-this-song':
+        spotifyThis();
+        break;
+    case 'movie-this':
+        movieThis();
+        break;
+    case 'do-what-it-says':
+        doIt();
+        break;
+    default:
+        console.log('Try again');
+        break;
 }
 
-var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+function movieThis() {
 
-console.log(queryUrl);
+    let movieName = "";
 
+    if(nodeArgs.length<4){
+        movieName="Mr. Nobody";
+    }
+    for (var i = 3; i < nodeArgs.length; i++) {
 
-axios.get(queryUrl).then(function(response){
-    console.log('*' + response.data.Title);
-    console.log('*' + response.data.Year);
-    console.log('*' + response.data.imdbRating);
+       if (i > 3 && i < nodeArgs.length) {
+            movieName = movieName + "+" + nodeArgs[i];
+        }
+        else {
+            movieName += nodeArgs[i];
+        }
+    }
+    var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=" + keys.omdb.id;
 
-    console.log('*' + response.data.Country);
-    console.log('*' + response.data.Language);
-    console.log('*' + response.data.Plot);
-    console.log('*' + response.data.Actors);
-});
+    console.log(queryUrl);
+
+    axios.get(queryUrl).then(function (response) {
+        console.log('* Title: ' + response.data.Title +
+            '\n* Year: ' + response.data.Year +
+            '\n* IMDB Rating: ' + response.data.imdbRating +
+            '\n* Rotten Tomatoes Rating: ' + response.data.Ratings[1]
+    /*need to figure out how to pull this rating */ +
+            '\n* Country: ' + response.data.Country +
+            '\n* Language: ' + response.data.Language +
+            '\n* Plot: ' + response.data.Plot + '\n* Actors' + response.data.Actors);
+    });
+
+};
