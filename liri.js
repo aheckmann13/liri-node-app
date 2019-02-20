@@ -5,7 +5,7 @@ var axios = require("axios");
 var keys = require("./keys.js");
 var fs = require("fs");
 
-// var spotify = new Spotify(keys.spotify);
+var spotify = new Spotify(keys.spotify);
 
 var nodeArgs = process.argv;
 
@@ -48,7 +48,8 @@ function movieThis() {
     console.log(queryUrl);
 
     axios.get(queryUrl).then(function (response) {
-        console.log('* Title: ' + response.data.Title +
+        
+        var output = ('* Title: ' + response.data.Title +
             '\n* Year: ' + response.data.Year +
             '\n* IMDB Rating: ' + response.data.imdbRating +
             '\n* Rotten Tomatoes Rating: ' + response.data.Ratings[1]
@@ -56,6 +57,21 @@ function movieThis() {
             '\n* Country: ' + response.data.Country +
             '\n* Language: ' + response.data.Language +
             '\n* Plot: ' + response.data.Plot + '\n* Actors' + response.data.Actors);
+            
+            console.log(output);
+            fs.appendFile('log.txt', output + '\n\n', function(err){
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    console.log('Content Added');
+                }
+            });
     });
 
 };
+
+
+
+
+
