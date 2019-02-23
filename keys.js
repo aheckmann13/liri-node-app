@@ -12,17 +12,3 @@ exports.bands = {
   exports.omdb = {
     id: process.env.OMDB_ID
   };
-
-
-/* 
-.env file contents
-
-# Spotify API keys
-
-SPOTIFY_ID=your-spotify-id
-SPOTIFY_SECRET=your-spotify-secret
-
-Bands_ID=codingbootcamp
-
-OMDB_ID=trilogy
-*/
